@@ -1,0 +1,154 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .producto-detalle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .producto-imagen {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .producto-imagen img:hover {
+    transform: scale(1.05);
+  }
+
+  .producto-info {
+    flex: 2;
+    min-width: 300px;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+  }
+
+  .precio {
+    font-size: 2rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .descripcion {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .vistas {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: 2rem;
+  }
+
+  .btn-comprar {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary-color);
+  }
+
+  .btn-comprar:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+  }
+
+  .sin-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    height: 300px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    color: var(--text-color);
+  }
+
+  @media (max-width: 768px) {
+    .producto-detalle {
+      flex-direction: column;
+    }
+
+    .producto-imagen,
+    .producto-info {
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .precio {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="producto-detalle">
+    <div class="producto-imagen">
+      {% if producto.imagen %}
+      <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" />
+      {% else %}
+      <div class="sin-imagen">[Sin Imagen]</div>
+      {% endif %}
+    </div>
+    <div class="producto-info">
+      <h1>{{ producto.nombre }}</h1>
+      <p class="precio">${{ producto.precio }}</p>
+      <p class="descripcion">{{ producto.descripcion }}</p>
+      <p class="vistas">Vistas: {{ producto.views }}</p>
+      <a href="{% url 'realizar_pedido' producto.id %}" class="btn-comprar"
+        >Comprar</a
+      >
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const productoDetalle = document.querySelector(".producto-detalle");
+
+    productoDetalle.style.opacity = 0;
+    productoDetalle.style.transform = "translateY(20px)";
+
+    setTimeout(() => {
+      productoDetalle.style.transition =
+        "opacity 0.5s ease, transform 0.5s ease";
+      productoDetalle.style.opacity = 1;
+      productoDetalle.style.transform = "translateY(0)";
+    }, 100);
+  });
+</script>
+{% endblock %}
